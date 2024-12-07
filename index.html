@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw SFX Minecraft</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+        #videoContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #videoPlayer {
+            position: relative; /* Ubah dari absolute menjadi relative */
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Berikan z-index positif */
+        }
+        #beginButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #005803;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #titleOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 9999;
+            pointer-events: auto; /* Ubah agar bisa diklik */
+}
+        #titleOverlay h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #titleOverlay p {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        #closeOverlayBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 30;
+        }
+        .coverVideo {
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div id="videoContainer">
+        <button id="beginButton">BEGIN</button>
+        <div class="coverVideo">
+            <video id="videoPlayer" style="display:none; ">
+                <source src="rot.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div id="titleOverlay" z-index="30">
+            <h1>Minecraft Raw SFX</h1>
+            <p>Teknik Komputer 3 server</p>
+            <button id="closeOverlayBtn">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const beginButton = document.getElementById('beginButton');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const titleOverlay = document.getElementById('titleOverlay');
+        const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+
+        // Fungsi untuk memasuki mode fullscreen
+        function enterFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { // Firefox
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { // Internet Explorer/Edge
+                element.msRequestFullscreen();
+            }
+        }
+
+        // Fungsi untuk keluar dari mode fullscreen
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Fungsi untuk mengatur mode landscape pada mobile
+        function setLandscapeOrientation() {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(e => {
+                    console.warn('Tidak dapat mengunci orientasi layar', e);
+                });
+            }
+        }
+
+        // Event listener untuk tombol BEGIN
+        beginButton.addEventListener('click', () => {
+            beginButton.style.display = 'none';
+            videoPlayer.style.display = 'block';
+            titleOverlay.style.display = 'flex';
+            videoPlayer.play();
+            
+            enterFullscreen(videoPlayer);
+            setLandscapeOrientation();
+        });
+
+        // Event listener untuk tombol Tutup Overlay
+        closeOverlayBtn.addEventListener('click', () => {
+            titleOverlay.style.display = 'none';
+        });
+
+        // Event listener untuk perubahan fullscreen
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const isFullscreen = document.fullscreenElement !== null;
+            
+            if (!isFullscreen) {
+                // Jika keluar dari fullscreen, pause video
+                videoPlayer.pause();
+                beginButton.style.display = 'block';
+                titleOverlay.style.display = 'none';
+            }
+        }
+
+        // Event listener untuk kontrol video
+        videoPlayer.addEventListener('play', () => {
+            if (!document.fullscreenElement) {
+                enterFullscreen(videoPlayer);
+            }
+        });
+    </script>
+</body>
+</html>
