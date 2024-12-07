@@ -26,19 +26,36 @@
             height: 100%;
             z-index: -1; /* Berikan z-index positif */
         }
-        #beginButton {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #005803;
-            color: white;
-            border: none;
-            cursor: pointer;
-            z-index: 10;
-        }
+#beginButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 45px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#beginButton:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+#beginButton:active {
+    transform: translate(-50%, -50%) scale(0.95);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
         #titleOverlay {
             position: fixed;
             top: 0;
